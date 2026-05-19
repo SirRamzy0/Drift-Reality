@@ -82,33 +82,33 @@ public sealed class CarHandlingProfile : ScriptableObject
             TurnRate = 132f,
             TurnInputSharpness = 5.8f,
             HighSpeedTurnMultiplier = 0.5f,
-            DriftTurnMultiplier = 1.28f,
+            DriftTurnMultiplier = 1.55f,
             BrakeTurnMultiplier = 1.25f,
             SteeringBySpeed = new AnimationCurve(
                 new Keyframe(0f, 0.5f),
                 new Keyframe(0.28f, 0.92f),
                 new Keyframe(1f, 0.52f)),
             Grip = 16.5f,
-            DriftGrip = 9.5f,
+            DriftGrip = 5.8f,
             DriftStartAngle = 6f,
             DriftFullAngle = 22f,
-            SteeringDriftAngle = 28f,
-            LateralDamping = 15f,
+            SteeringDriftAngle = 38f,
+            LateralDamping = 8.5f,
             GripBySlip = new AnimationCurve(
                 new Keyframe(0f, 1f),
                 new Keyframe(0.55f, 0.82f),
                 new Keyframe(1f, 0.58f)),
             DriftMinSpeed = 18f,
-            DriftSteerMultiplier = 1.45f,
-            DriftYawKick = 34f,
-            DriftSpeedRetention = 0.94f,
+            DriftSteerMultiplier = 1.85f,
+            DriftYawKick = 58f,
+            DriftSpeedRetention = 0.985f,
             DriftChargeRate = 0.72f,
             DriftMinChargeToBoost = 0.22f,
-            DriftBoostSpeed = 22f,
+            DriftBoostSpeed = 26f,
             DriftBoostDuration = 0.75f,
             DriftBoostAcceleration = 82f,
-            DriftExitAlignment = 0.92f,
-            DriftArcadeGrip = 11.5f,
+            DriftExitAlignment = 0.72f,
+            DriftArcadeGrip = 5.2f,
             Mass = 900f,
             LinearDamping = 0.04f,
             AngularDamping = 5f,
@@ -205,6 +205,50 @@ public sealed class CarHandlingProfile : ScriptableObject
             value.Grip *= grip;
             value.DriftGrip *= drift;
             value.Mass *= 1f + Mathf.Sin(index * 0.51f) * 0.07f;
+            return value.Validated();
+        }
+
+        public Settings CreateOpponentVariant(int index, float playerMaxSpeed, AiCarController.DriverClass driverClass)
+        {
+            Settings value = CreateOpponentVariant(index);
+            float playerSpeed = Mathf.Max(1f, playerMaxSpeed);
+            float speedFactor;
+            float accelerationFactor;
+            float gripFactor;
+            float mistakeHandlingFactor;
+
+            switch (driverClass)
+            {
+                case AiCarController.DriverClass.Leader:
+                    speedFactor = Random.Range(1.08f, 1.2f);
+                    accelerationFactor = Random.Range(1.12f, 1.28f);
+                    gripFactor = Random.Range(1.1f, 1.24f);
+                    mistakeHandlingFactor = Random.Range(1f, 1.14f);
+                    break;
+                case AiCarController.DriverClass.Wildcard:
+                    speedFactor = Random.Range(0.94f, 1.16f);
+                    accelerationFactor = Random.Range(0.92f, 1.24f);
+                    gripFactor = Random.Range(0.84f, 1.14f);
+                    mistakeHandlingFactor = Random.Range(0.84f, 1.18f);
+                    break;
+                default:
+                    speedFactor = Random.Range(0.99f, 1.09f);
+                    accelerationFactor = Random.Range(0.98f, 1.14f);
+                    gripFactor = Random.Range(0.98f, 1.1f);
+                    mistakeHandlingFactor = Random.Range(0.96f, 1.1f);
+                    break;
+            }
+
+            value.DisplayName = driverClass + " Opponent " + index;
+            value.MaxSpeed = playerSpeed * speedFactor;
+            value.NitroMaxSpeed = Mathf.Max(value.MaxSpeed + 18f, playerSpeed * Random.Range(speedFactor + 0.22f, speedFactor + 0.42f));
+            value.Acceleration *= accelerationFactor;
+            value.BrakeAcceleration *= Mathf.Lerp(0.94f, 1.12f, gripFactor);
+            value.TurnRate *= mistakeHandlingFactor;
+            value.Grip *= gripFactor;
+            value.DriftGrip *= gripFactor;
+            value.DriftArcadeGrip *= gripFactor;
+            value.LateralDamping *= gripFactor;
             return value.Validated();
         }
     }

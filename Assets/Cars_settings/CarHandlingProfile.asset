@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarHandlingProfile
   settings:
     DisplayName: Balanced
-    MaxSpeed: 44
+    MaxSpeed: 100
     Acceleration: 27
     LaunchAccelerationMultiplier: 0.48
     BrakeAcceleration: 46
@@ -55,6 +55,8 @@ MonoBehaviour:
     TurnRate: 92
     TurnInputSharpness: 7
     HighSpeedTurnMultiplier: 0.46
+    DriftTurnMultiplier: 1.85
+    BrakeTurnMultiplier: 1.5
     SteeringBySpeed:
       serializedVersion: 2
       m_Curve:
@@ -89,11 +91,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     Grip: 5.2
-    DriftGrip: 1.7
+    DriftGrip: 1.45
     DriftStartAngle: 11
     DriftFullAngle: 34
-    SteeringDriftAngle: 18
-    LateralDamping: 5.5
+    SteeringDriftAngle: 30
+    LateralDamping: 4.8
     GripBySlip:
       serializedVersion: 2
       m_Curve:
@@ -127,6 +129,17 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    DriftMinSpeed: 18
+    DriftSteerMultiplier: 1.85
+    DriftYawKick: 58
+    DriftSpeedRetention: 0.985
+    DriftChargeRate: 0.72
+    DriftMinChargeToBoost: 0.22
+    DriftBoostSpeed: 26
+    DriftBoostDuration: 0.75
+    DriftBoostAcceleration: 82
+    DriftExitAlignment: 0.72
+    DriftArcadeGrip: 4.8
     Mass: 900
     LinearDamping: 0.04
     AngularDamping: 5
@@ -135,7 +148,7 @@ MonoBehaviour:
     CollisionVelocityCarry: 0.45
     CollisionVelocityDecay: 9
     NitroImpulse: 20
-    NitroMaxSpeed: 68
+    NitroMaxSpeed: 100
     NitroAcceleration: 46
     NitroCooldown: 1.8
     NitroDuration: 0.6

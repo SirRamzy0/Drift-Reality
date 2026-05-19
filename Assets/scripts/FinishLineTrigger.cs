@@ -12,5 +12,6 @@ public sealed class FinishLineTrigger : MonoBehaviour
 
         string driver = car.PlayerControlled ? "Player" : car.name;
         Debug.Log(driver + " finished the race.");
+        RaceBootstrap.Instance?.NotifyFinished(car);
     }
 }

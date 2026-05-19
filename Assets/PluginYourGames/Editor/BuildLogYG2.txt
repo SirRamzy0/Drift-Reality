@@ -1,0 +1,3 @@
+﻿Build path: C:/GameDev/Building/Drift/Drift Reality.exe
+Build number: 2
+PluginYG version: 2.007

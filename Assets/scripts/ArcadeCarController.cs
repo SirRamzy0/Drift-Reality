@@ -52,6 +52,8 @@ public sealed class ArcadeCarController : MonoBehaviour
     public float CurrentSpeed => currentSpeed;
     public float MaxSpeed => handling.MaxSpeed;
     public bool IsGrounded => grounded;
+    public float VisualSteer => smoothedSteer;
+    public bool IsBraking => driveInput.y < -0.05f && currentSpeed > 0.5f;
 
     public void Initialize(ProceduralRoadGenerator newRoad, bool isPlayer)
     {
@@ -90,6 +92,23 @@ public sealed class ArcadeCarController : MonoBehaviour
     public void SetAiInput(float throttle, float steer, bool useNitro, bool jump)
     {
         SetAiInput(throttle, steer, useNitro, jump, false);
+    }
+
+    public void ApplyGuardrailSlowdown(float speedMultiplier, Vector3 collisionNormal)
+    {
+        speedMultiplier = Mathf.Clamp(speedMultiplier, 0.1f, 1f);
+        currentSpeed *= speedMultiplier;
+
+        Vector3 planarNormal = Flatten(collisionNormal);
+        if (planarNormal.sqrMagnitude > 0.001f)
+        {
+            planarNormal.Normalize();
+            externalVelocity = Vector3.ProjectOnPlane(externalVelocity, planarNormal) * 0.45f;
+
+            Vector3 planarVelocity = Flatten(body.linearVelocity);
+            Vector3 dampedVelocity = Vector3.ProjectOnPlane(planarVelocity, planarNormal) * speedMultiplier;
+            body.linearVelocity = dampedVelocity + Vector3.up * body.linearVelocity.y;
+        }
     }
 
     public bool CanUseNitro()
@@ -141,6 +160,24 @@ public sealed class ArcadeCarController : MonoBehaviour
 
         jumpRequested = false;
         nitroRequested = false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        RoadGuardrailCollision guardrail = collision.collider.GetComponentInParent<RoadGuardrailCollision>();
+        if (guardrail != null)
+        {
+            guardrail.ApplyEnter(collision, this);
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        RoadGuardrailCollision guardrail = collision.collider.GetComponentInParent<RoadGuardrailCollision>();
+        if (guardrail != null)
+        {
+            guardrail.ApplyStay(collision, this);
+        }
     }
 
     private void ApplyBodySettings()
@@ -359,7 +396,17 @@ public sealed class ArcadeCarController : MonoBehaviour
         }
 
         Vector3 localExternalVelocity = transform.InverseTransformDirection(externalVelocity);
-        localExternalVelocity.x = Mathf.Lerp(localExternalVelocity.x, 0f, handling.LateralDamping * Time.fixedDeltaTime);
+        if (drifting)
+        {
+            float driftSide = -Mathf.Sign(smoothedSteer);
+            float targetLateralSpeed = driftSide * currentSpeed * Mathf.Lerp(0.12f, 0.28f, Mathf.Abs(smoothedSteer));
+            localExternalVelocity.x = Mathf.Lerp(localExternalVelocity.x, targetLateralSpeed, 4.5f * Time.fixedDeltaTime);
+        }
+        else
+        {
+            localExternalVelocity.x = Mathf.Lerp(localExternalVelocity.x, 0f, handling.LateralDamping * Time.fixedDeltaTime);
+        }
+
         externalVelocity = transform.TransformDirection(localExternalVelocity);
 
         Vector3 finalPlanarVelocity = velocityDirection * currentSpeed + externalVelocity;

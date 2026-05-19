@@ -3,6 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(ArcadeCarController))]
 public sealed class AiCarController : MonoBehaviour
 {
+    public enum DriverClass
+    {
+        Leader,
+        Pack,
+        Wildcard
+    }
+
     [Header("Path")]
     [SerializeField] private ProceduralRoadGenerator road;
     [SerializeField] private float baseLookAheadDistance = 44f;
@@ -41,18 +48,50 @@ public sealed class AiCarController : MonoBehaviour
     private float mistakeThrottleBias;
     private float throttleMemory = 1f;
 
+    public void ConfigureDriverClass(DriverClass driverClass)
+    {
+        switch (driverClass)
+        {
+            case DriverClass.Leader:
+                aggression = Random.Range(0.9f, 1f);
+                laneDiscipline = Random.Range(0.82f, 0.96f);
+                nitroChance = Random.Range(0.58f, 0.82f);
+                mistakeChance = Random.Range(0.02f, 0.055f);
+                mistakeSeverity = Random.Range(0.12f, 0.24f);
+                minimumCornerSpeed = Random.Range(43f, 54f);
+                brakeSpeedMargin = Random.Range(4.5f, 7f);
+                driftTurnAngle = Random.Range(30f, 38f);
+                break;
+            case DriverClass.Pack:
+                aggression = Random.Range(0.68f, 0.88f);
+                laneDiscipline = Random.Range(0.66f, 0.88f);
+                nitroChance = Random.Range(0.34f, 0.58f);
+                mistakeChance = Random.Range(0.07f, 0.14f);
+                mistakeSeverity = Random.Range(0.2f, 0.38f);
+                minimumCornerSpeed = Random.Range(36f, 46f);
+                brakeSpeedMargin = Random.Range(5.5f, 9f);
+                driftTurnAngle = Random.Range(33f, 43f);
+                break;
+            case DriverClass.Wildcard:
+                aggression = Random.Range(0.55f, 1f);
+                laneDiscipline = Random.Range(0.34f, 0.7f);
+                nitroChance = Random.Range(0.18f, 0.72f);
+                mistakeChance = Random.Range(0.16f, 0.32f);
+                mistakeSeverity = Random.Range(0.4f, 0.78f);
+                minimumCornerSpeed = Random.Range(30f, 47f);
+                brakeSpeedMargin = Random.Range(4.5f, 12f);
+                driftTurnAngle = Random.Range(28f, 52f);
+                laneChangeInterval = Random.Range(2.2f, 4.2f);
+                laneChangeAmount = Random.Range(5f, 8f);
+                break;
+        }
+    }
+
     public void Initialize(ProceduralRoadGenerator newRoad, float newLaneOffset)
     {
         road = newRoad;
         laneOffset = newLaneOffset;
         desiredLaneOffset = newLaneOffset;
-
-        float personalitySeed = Mathf.Abs(newLaneOffset) + Mathf.Abs(newRoad != null ? newRoad.GetHashCode() : 17) * 0.013f;
-        aggression = Mathf.Clamp01(0.48f + Mathf.Abs(Mathf.Sin(personalitySeed)) * 0.42f);
-        laneDiscipline = Mathf.Clamp01(0.55f + Mathf.Abs(Mathf.Cos(personalitySeed * 0.7f)) * 0.32f);
-        nitroChance = Mathf.Lerp(0.18f, 0.52f, aggression);
-        mistakeChance = Mathf.Lerp(0.22f, 0.09f, aggression);
-        mistakeSeverity = Mathf.Lerp(0.55f, 0.28f, laneDiscipline);
     }
 
     private void Awake()

@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -248,14 +248,14 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,14 +282,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -334,8 +334,11 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &410087041
 Transform:
   m_ObjectHideFlags: 0
@@ -363,17 +366,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,14 +432,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1660057539 &9223372036854775807
-SceneRoots:
-  m_ObjectHideFlags: 0
-  m_Roots:
-  - {fileID: 330585546}
-  - {fileID: 410087041}
-  - {fileID: 832575519}
-  - {fileID: 1900000002}
 --- !u!1 &1900000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +487,11 @@ MonoBehaviour:
   - {fileID: 100100000, guid: 01a641bad5cd7e44599af99a995ac2dd, type: 3}
   - {fileID: 100100000, guid: 40daa834c5ac2454f8d1b8f7219ec950, type: 3}
   - {fileID: 100100000, guid: 766fb075bda5fc9439ad6227f267ad54, type: 3}
-  opponentCount: 8
+  initialCompetitorCount: 50
+  firstRoundQualifierCount: 25
+  secondRoundQualifierCount: 10
+  resultDelay: 2.15
+  menuSceneName: Menu
   spawnDistance: 9
   startSpacing: 5.2
   roadSettings:
@@ -496,11 +501,27 @@ MonoBehaviour:
     ControlPointSpacing: 28
     SamplesPerSegment: 7
     MaxSlopeAngle: 4.5
+  guardrailSettings:
+    Enabled: 1
+    MinTurnAngle: 9
+    TurnLookAheadSamples: 8
+    SampleStride: 2
+    CoverageChance: 0.72
+    BothSidesChance: 0.16
+    GapChance: 0.18
+    MinSectionLength: 18
+    MaxSectionLength: 48
+    EdgeOffset: 0.38
+    SegmentLength: 7.5
+    SegmentThickness: 0.58
+    SegmentHeight: 1.25
+    EnterSpeedMultiplier: 0.72
+    StaySpeedMultiplier: 0.965
   cameraSettings:
-    Offset: {x: 0, y: 4.8, z: -7.4}
-    PositionSharpness: 9
-    RotationSharpness: 11
-    BaseFieldOfView: 64
+    Offset: {x: 0, y: 3, z: -5}
+    PositionSharpness: 30
+    RotationSharpness: 20
+    BaseFieldOfView: 55
     SpeedFieldOfView: 7
   playerHandlingProfile: {fileID: 0}
   playerHandling:
@@ -519,7 +540,7 @@ MonoBehaviour:
     TurnRate: 132
     TurnInputSharpness: 5.8
     HighSpeedTurnMultiplier: 0.5
-    DriftTurnMultiplier: 1.28
+    DriftTurnMultiplier: 1.55
     BrakeTurnMultiplier: 1.25
     SteeringBySpeed:
       serializedVersion: 2
@@ -528,11 +549,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     Grip: 16.5
-    DriftGrip: 9.5
+    DriftGrip: 5.8
     DriftStartAngle: 6
     DriftFullAngle: 22
-    SteeringDriftAngle: 28
-    LateralDamping: 15
+    SteeringDriftAngle: 38
+    LateralDamping: 8.5
     GripBySlip:
       serializedVersion: 2
       m_Curve: []
@@ -540,16 +561,16 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     DriftMinSpeed: 18
-    DriftSteerMultiplier: 1.45
-    DriftYawKick: 34
-    DriftSpeedRetention: 0.94
+    DriftSteerMultiplier: 1.85
+    DriftYawKick: 58
+    DriftSpeedRetention: 0.985
     DriftChargeRate: 0.72
     DriftMinChargeToBoost: 0.22
-    DriftBoostSpeed: 22
+    DriftBoostSpeed: 26
     DriftBoostDuration: 0.75
     DriftBoostAcceleration: 82
-    DriftExitAlignment: 0.92
-    DriftArcadeGrip: 11.5
+    DriftExitAlignment: 0.72
+    DriftArcadeGrip: 5.2
     Mass: 900
     LinearDamping: 0.04
     AngularDamping: 5
@@ -581,7 +602,7 @@ MonoBehaviour:
     TurnRate: 124
     TurnInputSharpness: 5.5
     HighSpeedTurnMultiplier: 0.52
-    DriftTurnMultiplier: 1.22
+    DriftTurnMultiplier: 1.42
     BrakeTurnMultiplier: 1.2
     SteeringBySpeed:
       serializedVersion: 2
@@ -590,11 +611,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     Grip: 15.5
-    DriftGrip: 9
+    DriftGrip: 6.4
     DriftStartAngle: 6
     DriftFullAngle: 23
-    SteeringDriftAngle: 26
-    LateralDamping: 14
+    SteeringDriftAngle: 34
+    LateralDamping: 9
     GripBySlip:
       serializedVersion: 2
       m_Curve: []
@@ -602,16 +623,16 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     DriftMinSpeed: 18
-    DriftSteerMultiplier: 1.36
-    DriftYawKick: 30
-    DriftSpeedRetention: 0.94
+    DriftSteerMultiplier: 1.65
+    DriftYawKick: 48
+    DriftSpeedRetention: 0.98
     DriftChargeRate: 0.65
     DriftMinChargeToBoost: 0.24
-    DriftBoostSpeed: 19
+    DriftBoostSpeed: 22
     DriftBoostDuration: 0.7
     DriftBoostAcceleration: 76
-    DriftExitAlignment: 0.9
-    DriftArcadeGrip: 10.8
+    DriftExitAlignment: 0.76
+    DriftArcadeGrip: 5.8
     Mass: 900
     LinearDamping: 0.04
     AngularDamping: 5
@@ -627,3 +648,20 @@ MonoBehaviour:
     JumpImpulse: 7.5
     JumpCooldown: 1.2
   generateOpponentVariations: 1
+  leaderCount:
+    Min: 4
+    Max: 9
+  packCount:
+    Min: 24
+    Max: 36
+  wildcardCount:
+    Min: 5
+    Max: 12
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 330585546}
+  - {fileID: 410087041}
+  - {fileID: 832575519}
+  - {fileID: 1900000002}
