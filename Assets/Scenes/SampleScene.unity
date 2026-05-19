@@ -430,3 +430,200 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
+  - {fileID: 1900000002}
+--- !u!1 &1900000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900000002}
+  - component: {fileID: 1900000003}
+  m_Layer: 0
+  m_Name: Race Bootstrap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1900000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1900000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f62242c879d4f84a9a3988b5eab3201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carPrefabs:
+  - {fileID: 100100000, guid: ab2d19c06ba084742ab945becb2034b2, type: 3}
+  - {fileID: 100100000, guid: 077937a285a1ebb4c930510b06caa222, type: 3}
+  - {fileID: 100100000, guid: 6b8f4e39f2c36bf4795f6ea066467bda, type: 3}
+  - {fileID: 100100000, guid: 69c1f625d0382e34087fce5daa5b84f9, type: 3}
+  - {fileID: 100100000, guid: 9317c76752b949d4685085b89086a0d9, type: 3}
+  - {fileID: 100100000, guid: 8e3e74c4c5478f142bd8fb186836ff50, type: 3}
+  - {fileID: 100100000, guid: b5c72acce1fb15a4eb0ac27b74580cdc, type: 3}
+  - {fileID: 100100000, guid: 01a641bad5cd7e44599af99a995ac2dd, type: 3}
+  - {fileID: 100100000, guid: 40daa834c5ac2454f8d1b8f7219ec950, type: 3}
+  - {fileID: 100100000, guid: 766fb075bda5fc9439ad6227f267ad54, type: 3}
+  opponentCount: 8
+  spawnDistance: 9
+  startSpacing: 5.2
+  roadSettings:
+    Seed: 4821
+    TargetLength: 2450
+    RoadWidth: 30
+    ControlPointSpacing: 28
+    SamplesPerSegment: 7
+    MaxSlopeAngle: 4.5
+  cameraSettings:
+    Offset: {x: 0, y: 4.8, z: -7.4}
+    PositionSharpness: 9
+    RotationSharpness: 11
+    BaseFieldOfView: 64
+    SpeedFieldOfView: 7
+  playerHandlingProfile: {fileID: 0}
+  playerHandling:
+    DisplayName: Player Balanced
+    MaxSpeed: 100
+    Acceleration: 54
+    LaunchAccelerationMultiplier: 0.72
+    BrakeAcceleration: 145
+    CoastingDeceleration: 18
+    AccelerationBySpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    TurnRate: 132
+    TurnInputSharpness: 5.8
+    HighSpeedTurnMultiplier: 0.5
+    DriftTurnMultiplier: 1.28
+    BrakeTurnMultiplier: 1.25
+    SteeringBySpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Grip: 16.5
+    DriftGrip: 9.5
+    DriftStartAngle: 6
+    DriftFullAngle: 22
+    SteeringDriftAngle: 28
+    LateralDamping: 15
+    GripBySlip:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    DriftMinSpeed: 18
+    DriftSteerMultiplier: 1.45
+    DriftYawKick: 34
+    DriftSpeedRetention: 0.94
+    DriftChargeRate: 0.72
+    DriftMinChargeToBoost: 0.22
+    DriftBoostSpeed: 22
+    DriftBoostDuration: 0.75
+    DriftBoostAcceleration: 82
+    DriftExitAlignment: 0.92
+    DriftArcadeGrip: 11.5
+    Mass: 900
+    LinearDamping: 0.04
+    AngularDamping: 5
+    ExtraGravity: 28
+    AirControl: 0.26
+    CollisionVelocityCarry: 0.45
+    CollisionVelocityDecay: 9
+    NitroImpulse: 24
+    NitroMaxSpeed: 140
+    NitroAcceleration: 82
+    NitroCooldown: 1.8
+    NitroDuration: 0.6
+    JumpImpulse: 7.5
+    JumpCooldown: 1.2
+  opponentHandlingProfiles: []
+  opponentHandling:
+    DisplayName: Opponent Balanced
+    MaxSpeed: 94
+    Acceleration: 50
+    LaunchAccelerationMultiplier: 0.7
+    BrakeAcceleration: 132
+    CoastingDeceleration: 17
+    AccelerationBySpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    TurnRate: 124
+    TurnInputSharpness: 5.5
+    HighSpeedTurnMultiplier: 0.52
+    DriftTurnMultiplier: 1.22
+    BrakeTurnMultiplier: 1.2
+    SteeringBySpeed:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    Grip: 15.5
+    DriftGrip: 9
+    DriftStartAngle: 6
+    DriftFullAngle: 23
+    SteeringDriftAngle: 26
+    LateralDamping: 14
+    GripBySlip:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    DriftMinSpeed: 18
+    DriftSteerMultiplier: 1.36
+    DriftYawKick: 30
+    DriftSpeedRetention: 0.94
+    DriftChargeRate: 0.65
+    DriftMinChargeToBoost: 0.24
+    DriftBoostSpeed: 19
+    DriftBoostDuration: 0.7
+    DriftBoostAcceleration: 76
+    DriftExitAlignment: 0.9
+    DriftArcadeGrip: 10.8
+    Mass: 900
+    LinearDamping: 0.04
+    AngularDamping: 5
+    ExtraGravity: 28
+    AirControl: 0.26
+    CollisionVelocityCarry: 0.45
+    CollisionVelocityDecay: 9
+    NitroImpulse: 21
+    NitroMaxSpeed: 128
+    NitroAcceleration: 76
+    NitroCooldown: 1.8
+    NitroDuration: 0.6
+    JumpImpulse: 7.5
+    JumpCooldown: 1.2
+  generateOpponentVariations: 1
