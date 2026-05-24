@@ -144,13 +144,10 @@ public sealed class ProceduralRoadGenerator : MonoBehaviour, IRoadProvider
         }
 
         float bestSqrDistance = float.MaxValue;
-        Vector2 query = new Vector2(position.x, position.z);
 
         for (int i = 0; i < samples.Count; i++)
         {
-            Vector3 samplePosition = samples[i].Position;
-            Vector2 sample2D = new Vector2(samplePosition.x, samplePosition.z);
-            float sqrDistance = (query - sample2D).sqrMagnitude;
+            float sqrDistance = (position - samples[i].Position).sqrMagnitude;
 
             if (sqrDistance < bestSqrDistance)
             {
