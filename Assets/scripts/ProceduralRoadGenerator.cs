@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class ProceduralRoadGenerator : MonoBehaviour
+public sealed class ProceduralRoadGenerator : MonoBehaviour, IRoadProvider
 {
     private enum RoadPattern
     {

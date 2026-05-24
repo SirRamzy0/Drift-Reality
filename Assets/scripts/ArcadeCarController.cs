@@ -17,8 +17,10 @@ public sealed class ArcadeCarController : MonoBehaviour
 
     [Header("Road")]
     [SerializeField] private ProceduralRoadGenerator road;
+    [SerializeField] private MonoBehaviour roadProviderSource;
     [SerializeField] private float respawnFallDepth = 16f;
 
+    private IRoadProvider roadProvider;
     private Rigidbody body;
     private BoxCollider boxCollider;
     private ParticleSystem[] nitroEffects;
@@ -55,9 +57,21 @@ public sealed class ArcadeCarController : MonoBehaviour
     public float VisualSteer => smoothedSteer;
     public bool IsBraking => driveInput.y < -0.05f && currentSpeed > 0.5f;
 
+    public void Initialize(IRoadProvider newRoadProvider, bool isPlayer)
+    {
+        roadProvider = newRoadProvider;
+        if (newRoadProvider is ProceduralRoadGenerator proceduralRoad)
+        {
+            road = proceduralRoad;
+        }
+
+        playerControlled = isPlayer;
+    }
+
     public void Initialize(ProceduralRoadGenerator newRoad, bool isPlayer)
     {
         road = newRoad;
+        roadProvider = newRoad;
         playerControlled = isPlayer;
     }
 
@@ -275,10 +289,10 @@ public sealed class ArcadeCarController : MonoBehaviour
             grounded = road == null || road.IsRoadCollider(hit.collider);
         }
 
-        if (grounded && road != null)
+        if (grounded && roadProvider != null)
         {
-            road.GetNearestSample(transform.position, out float lateralOffset, out int nearestIndex);
-            if (Mathf.Abs(lateralOffset) <= road.RoadWidth * 0.55f)
+            roadProvider.GetNearestSample(transform.position, out float lateralOffset, out int nearestIndex);
+            if (Mathf.Abs(lateralOffset) <= roadProvider.RoadWidth * 0.55f)
             {
                 lastSafeSampleIndex = nearestIndex;
             }
@@ -475,22 +489,22 @@ public sealed class ArcadeCarController : MonoBehaviour
 
     private void ApplyRespawnSafety()
     {
-        if (road == null || road.Samples.Count == 0)
+        if (roadProvider == null || roadProvider.Samples.Count == 0)
         {
             return;
         }
 
-        ProceduralRoadGenerator.RoadSample nearest = road.GetNearestSample(transform.position, out float lateralOffset, out _);
+        ProceduralRoadGenerator.RoadSample nearest = roadProvider.GetNearestSample(transform.position, out float lateralOffset, out _);
         bool tooLow = transform.position.y < nearest.Position.y - respawnFallDepth;
-        bool farAway = Mathf.Abs(lateralOffset) > road.RoadWidth * 3.5f;
+        bool farAway = Mathf.Abs(lateralOffset) > roadProvider.RoadWidth * 3.5f;
 
         if (!tooLow && !farAway)
         {
             return;
         }
 
-        int safeIndex = Mathf.Clamp(lastSafeSampleIndex - 3, 0, road.Samples.Count - 1);
-        ProceduralRoadGenerator.RoadSample safe = road.Samples[safeIndex];
+        int safeIndex = Mathf.Clamp(lastSafeSampleIndex - 3, 0, roadProvider.Samples.Count - 1);
+        ProceduralRoadGenerator.RoadSample safe = roadProvider.Samples[safeIndex];
         Quaternion safeRotation = Quaternion.LookRotation(safe.Forward, Vector3.up);
         yaw = safeRotation.eulerAngles.y;
         velocityDirection = safe.Forward.normalized;
